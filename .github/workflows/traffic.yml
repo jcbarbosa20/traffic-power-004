@@ -1,0 +1,21 @@
+name: TrafficBot
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/10 * * * *'
+jobs:
+  hit:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v4
+    - run: pip install requests fake-useragent
+    - run: |
+        import requests
+        from fake_useragent import UserAgent
+        ua = UserAgent()
+        TARGET = "https://v0-dollar-price-today.vercel.app/"
+        for _ in range(300):
+            requests.get(TARGET + random.choice(["/", "/about", "/?ref=1"]), 
+                        headers={"User-Agent": ua.random})
+        print("Traffic complete!")
